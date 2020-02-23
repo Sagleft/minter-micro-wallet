@@ -1,0 +1,241 @@
+<html>
+	<head>
+		<title>Minter Micro Wallet</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.3.2/dist/css/uikit.min.css" />
+		<style type="text/css">
+			.main-color { background: #d15c22 !important; }
+			.uk-logo, .uk-logo:hover { color: white; }
+			.text-center { text-align: center; }
+			.btn-mini {padding-left: 10px; padding-right: 10px; }
+			footer { background-color: #3b3b3b; color: white; text-align: right; }
+		</style>
+	</head>
+	<body>
+		<script>
+			const mySeed = "radio stick east donor top picnic age chef follow cotton obvious slight";
+		</script>
+
+		<nav class="uk-navbar-container main-color uk-margin" uk-navbar>
+			<div class="uk-navbar-left">
+				<a class="uk-navbar-item uk-logo" href="#">
+					<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+					 <g class="layer">
+					  <title>Layer 1</title>
+					  <g id="svg_12">
+					   <circle cx="31.625001" cy="32.049999" fill="#d15c22" id="svg_1" r="29.208471" stroke="#ffffff" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="3"/>
+					   <line fill="none" fill-opacity="0" id="svg_7" stroke="#ffffff" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="3" x1="27.386828" x2="18.307984" y1="18.53965" y2="37.276839"/>
+					   <line fill="none" fill-opacity="0" id="svg_8" stroke="#ffffff" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="3" x1="43.226513" x2="39.556342" y1="23.948323" y2="45.969349"/>
+					   <line fill="none" fill-opacity="0" id="svg_9" stroke="#ffffff" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="3" x1="18.114817" x2="39.363175" y1="36.890505" y2="45.003514"/>
+					   <line fill="none" fill-opacity="0" id="svg_10" stroke="#ffffff" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="3" x1="27.193661" x2="43.806014" y1="18.346483" y2="23.948323"/>
+					   <line fill="none" fill-opacity="0" id="svg_11" stroke="#ffffff" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="3" x1="18.307984" x2="43.999181" y1="36.890505" y2="23.755156"/>
+					   <circle cx="19.080651" cy="36.697338" fill="#ffffff" id="svg_5" r="9.274021" stroke="#000000" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="0"/>
+					   <circle cx="27.386828" cy="18.53965" fill="#ffffff" id="svg_4" r="4.147469" stroke="#000000" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="0"/>
+					   <circle cx="43.612847" cy="24.914157" fill="#ffffff" id="svg_3" r="7.523596" stroke="#000000" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="0"/>
+					   <circle cx="39.363175" cy="45.196681" fill="#ffffff" id="svg_6" r="6.646736" stroke="#000000" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="0"/>
+					  </g>
+					 </g>
+					</svg>
+					<span style="margin-left: 0.5rem;">MicroWallet</span>
+				</a>
+			</div>
+		</nav>
+
+		<div class="uk-section uk-padding-small text-center">
+			<span id="wallet_address">loading..</span>
+			<button class="uk-button uk-button-default btn-copy btn-mini" data-clipboard-text="" id="copyWAddr" style="margin-left: 10px;">copy</button>
+			<br/>
+			<b>Your balance: <span id="wallet_balance">...</span> BIP</b>
+		</div>
+		<hr>
+		<div class="uk-section uk-padding-small text-center">
+			<div>
+				<fieldset class="uk-fieldset">
+					<legend class="uk-legend">Send coins</legend>
+					<div class="uk-margin">
+						<input class="uk-input uk-form-width-medium" id="inputAddr" type="text" placeholder="Minter address">
+					</div>
+					<div class="uk-margin">
+						<select class="uk-select uk-form-width-medium" id="inputCoin">
+							<option value="0">BIP</option>
+						</select>
+					</div>
+					<div class="uk-margin">
+						<input class="uk-input uk-form-width-medium" id="inputAmount" type="number" placeholder="amount">
+					</div>
+				</fieldset>
+				<a class="uk-button uk-button-default" id="btnConfirmTr">Send</a>
+			</div>
+		</div>
+
+		<hr>
+		<div class="uk-section uk-padding-small uk-table-small text-center">
+			<legend class="uk-legend">My coins</legend>
+			<table class="uk-table uk-table-striped uk-table-hover" id="tableMyCoins">
+				<thead>
+					<tr>
+						<th>coin</th>
+						<th>balance</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>BIP</td>
+						<td>--</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<button class="uk-button uk-button-default btn-mini" style="margin-left: 1rem;" onclick="refreshBalance();">refresh</button>
+		<hr>
+
+		<div class="uk-section uk-padding-small uk-table-small text-center">
+			<legend class="uk-legend">Latest transactions</legend>
+			<table class="uk-table uk-table-striped uk-table-hover" id="tableMyTrs">
+				<thead>
+					<tr>
+						<th>Hash</th>
+						<th>Block</th>
+						<th>Type</th>
+						<th>Coin</th>
+						<th>Amount</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<button class="uk-button uk-button-default btn-mini" style="margin-left: 1rem;" onclick="refreshTransactions();">refresh</button>
+		<br/><br/>
+		
+		<footer class="uk-padding-small">
+			<span>Developed by Sagleft</span>
+		</footer>
+
+		<script src="https://unpkg.com/minter-js-sdk"></script>
+		<script src="https://unpkg.com/minterjs-wallet"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+		
+		<script>
+			const EAPIaddr = 'https://explorer-api.minter.network/api/v1/';
+			const minterNode = new minterSDK.Minter({apiType: 'node', baseURL: 'https://api.minter.one/'});
+			
+			const wallet = minterWallet.walletFromMnemonic(mySeed);
+			
+			//TODO: check wallet
+			const walletAddr = wallet.getAddressString();
+			var walletBalance = 0;
+			$("#wallet_address").text(walletAddr);
+			$("#copyWAddr").attr('data-clipboard-text', walletAddr);
+			new ClipboardJS('.btn-copy');
+			
+			function setBalance(newbalance) {
+				$("#wallet_balance").text(newbalance);
+			}
+			
+			function refreshBalance() {
+				$.get( EAPIaddr + "addresses/" + walletAddr, function( resp ) {
+					if('data' in resp) {
+						//TODO: check resp.data.balances is correct
+						$("#tableMyCoins > tbody").find("tr").remove();
+						$("#inputCoin").find("option").remove();
+						
+						for(i=0; i < resp.data.balances.length; i++) {
+							coin_tag = resp.data.balances[i].coin;
+							coin_balance =  +(resp.data.balances[i].amount);
+							if(coin_tag == "BIP") {
+								walletBalance = coin_balance;
+								setBalance(coin_balance.toFixed(4));
+							}
+							
+							$("#tableMyCoins").append("<tr><td>" + coin_tag + "</td><td>" + coin_balance.toFixed(4) + "</td></tr>");
+							$("#inputCoin").append(new Option(coin_tag, coin_balance));
+						}
+					}
+				});
+			}
+			
+			function refreshTransactions() {
+				$.get( EAPIaddr + "addresses/" + walletAddr + "/transactions", function( resp ) {
+					if('data' in resp) {
+						$("#tableMyTrs > tbody").find("tr").remove();
+						
+						for(i=0; i < resp.data.length; i++) {
+							//TODO: format tr type
+							tr_value = +(resp.data[i].data.value);
+							hash_truncated = resp.data[i].hash.substring(0,8) + "...";
+							$("#tableMyTrs").append("<tr><td>" + hash_truncated + "</td><td>" + resp.data[i].block + "</td><td>" + resp.data[i].type + "</td><td>" + resp.data[i].data.coin + "</td><td>" + tr_value.toFixed(4) + "</td></tr>");
+						}
+					}
+				});
+			}
+			
+			$("#btnConfirmTr").click(function() {
+				tr_addr   = $("#inputAddr").val();
+				tr_coin   = $("#inputCoin option:selected").text();
+				tr_amount = +($("#inputAmount").val());
+				
+				trDetails  = "address: " + tr_addr + "\n";
+				trDetails += "coin: " + tr_coin + "\n";
+				trDetails += "amount: " + tr_amount;
+				
+				if(confirm("Confirm transaction?\n\n" + trDetails)) {
+					//for BIP gas
+					can_continue = true;
+					if(tr_coin == "BIP") {
+						if(walletBalance < tr_amount + 0.01) {
+							can_continue = false;
+							$.notify("Not enough balance to complete the transaction", "error");
+						}
+					} else {
+						coin_balance = +($("#inputCoin").val(tr_coin));
+						if(coin_balance < tr_amount) {
+							can_continue = false;
+							$.notify("Not enough balance to complete the transaction", "error");
+						}
+						if(walletBalance < 0.01) {
+							can_continue = false;
+							$.notify("Not enough balance to complete the transaction", "error");
+						}
+					}
+					
+					if(can_continue) {
+						txParams = {
+							privateKey: wallet.getPrivateKeyString(),
+							nonce: minterNode.getNonce(walletAddr),
+							chainId: 1,
+							type: minterSDK.TX_TYPE.SEND,
+							data: {
+								to: tr_addr,
+								value: tr_amount,
+								coin: tr_coin
+							},
+							gasCoin: 'BIP',
+							gasPrice: 1,
+							//message: 'custom message'
+						};
+						//TODO: choose gasCoin?
+						
+						minterNode.postTx(txParams)
+							.then((txHash) => {
+								$.notify("Transaction has been sent", "success");
+								console.log('Tx created: ' + txHash);
+								refreshBalance();
+								refreshTransactions();
+							}).catch((error) => {
+								const errorMessage = error.response.data.error.log;
+								console.log(errorMessage);
+								$.notify("Error =(", "error");
+							});
+					}
+				}
+			});
+			
+			refreshBalance();
+			refreshTransactions();
+			
+			setTimeout(refreshBalance, 15000);
+			setTimeout(refreshTransactions, 15000);
+		</script>
+	</body>
+</html>
